@@ -1,0 +1,12 @@
+apiVersion: example.com/v1
+kind: DemoCrd
+metadata:
+  name: democrds-test
+  namespace: default
+spec:
+  description: demo-description-string
+  info: ["info1","info2"]
+  count: 2
+  extraInfo:
+    infoOne: demo-one
+    infoTwo: demo-two

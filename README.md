@@ -126,9 +126,7 @@ type SimpleServiceStatus struct {
 ```
 
 
-2. The file `./controllers/simpleservice_controller.go` contains the controller logic. It’s a controller’s job to ensure that, for any given object, the actual state of the world (both the cluster state, and potentially external state like running containers for Kubelet or loadbalancers for a cloud provider) matches the desired state in the object. In controller-runtime, the logic that implements the reconciling for a specific kind is called a Reconciler. A reconciler takes the name of an object, and returns whether or not we need to try again (e.g. in case of errors or periodic controllers, like the HorizontalPodAutoscaler).
-
-Add Role changes to edit deployment and service
+2. Add extra permissions so that the controller can edit deployment and service in `./controllers/simpleservice_controller.go`. This will be used by the `make manifests` to generate yaml needed for CRD deployment.
 
 ```
 //+kubebuilder:rbac:groups=apps/v1,resources=deployment,verbs=get;list;watch;create;update;patch;delete
@@ -139,10 +137,11 @@ Add Role changes to edit deployment and service
 //+kubebuilder:rbac:groups=com.myorg,resources=simpleservices/finalizers,verbs=update
 ```
 
+3. The file `./controllers/simpleservice_controller.go` contains the controller logic. It’s a controller’s job to ensure that, for any given object, the actual state of the world (both the cluster state, and potentially external state like running containers for Kubelet or loadbalancers for a cloud provider) matches the desired state in the object. In controller-runtime, the logic that implements the reconciling for a specific kind is called a Reconciler. A reconciler takes the name of an object, and returns whether or not we need to try again (e.g. in case of errors or periodic controllers, like the HorizontalPodAutoscaler).
 
 <details>
 
-<summary>3. Add logic to "Reconcile" method in "./controllers/simpleservice_controller.go" file</summary>
+<summary>Add logic to "Reconcile" method in "./controllers/simpleservice_controller.go" file</summary>
 
 ```
 func (r *SimpleServiceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
